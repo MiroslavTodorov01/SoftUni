@@ -1,0 +1,60 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Furniture {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        String line = sc.nextLine();
+
+        List<String> info = new ArrayList<>();
+
+        while (!line.equals("Purchase")){
+
+            Pattern pattern = Pattern.compile(">{2}([A-Z]*[a-z]*)<{2}(\\d+)!(\\d+)|>{2}([A-Z]*[a-z]*)<{2}(\\d+\\.\\d+)!(\\d+)");
+
+            Matcher matcher = pattern.matcher(line);
+
+
+
+            while (matcher.find()){
+
+                if (matcher.group(1) == null){
+                    info.add(matcher.group(4));
+                    info.add(matcher.group(5));
+                    info.add(matcher.group(6));
+                }else {
+                    info.add(matcher.group(1));
+                    info.add(matcher.group(2));
+                    info.add(matcher.group(3));
+                }
+            }
+
+            line = sc.nextLine();
+        }
+
+        double sum = 0;
+
+
+        System.out.println("Bought furniture:");
+
+        for (int i = 0; i < info.size(); i += 3) {
+            String name = info.get(i);
+            double convert = Double.parseDouble(info.get(i + 1));
+            int quantity = Integer.parseInt(info.get(i + 2));
+
+            System.out.println(name);
+
+            sum += convert * quantity;
+        }
+
+        System.out.printf("Total money spend: %.2f",sum);
+    }
+}
+
+
