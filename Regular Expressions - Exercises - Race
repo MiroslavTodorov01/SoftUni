@@ -1,0 +1,90 @@
+import java.security.KeyStore;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Race {
+
+    static void gettingValidRacers(Map<String,Integer> input, String[] racers){
+
+        for (int i = 0; i < racers.length; i++) {
+            input.put(racers[i],0);
+        }
+
+    }
+
+
+    static void addKilometers(StringBuilder input,Map<String,Integer> racers,String line){
+
+        for(Map.Entry<String,Integer> entry : racers.entrySet()){
+
+            if (entry.getKey().equals(input.toString())){
+                Pattern pattern = Pattern.compile("(\\d)");
+                Matcher matcher = pattern.matcher(line);
+                int sum = 0;
+
+                while (matcher.find()){
+                    sum += Integer.parseInt(matcher.group(1));
+                }
+
+                if (entry.getValue() != 0){
+                    racers.put(entry.getKey(),racers.get(entry.getKey()) + sum);
+                }else {
+                    racers.put(entry.getKey(),sum);
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        String[] firstLine = sc.nextLine().split(", ");
+
+        Map<String,Integer> racers = new HashMap<>();
+
+        gettingValidRacers(racers,firstLine);
+
+        String lines = sc.nextLine();
+
+        while (!lines.equals("end of race")){
+
+            Pattern pattern = Pattern.compile("([A-Z]*[a-z]*)");
+            Matcher matcher = pattern.matcher(lines);
+            StringBuilder nameCheck = new StringBuilder();
+
+            while (matcher.find()){
+
+                nameCheck.append(matcher.group(1));
+            }
+
+            addKilometers(nameCheck,racers,lines);
+
+            lines = sc.nextLine();
+        }
+
+        List<Map.Entry<String,Integer>> list = new ArrayList<>(racers.entrySet());
+        list.sort(Map.Entry.comparingByValue());
+        Collections.reverse(list);
+
+        Map<String , Integer> result = new LinkedHashMap<>();
+        for (Map.Entry<String , Integer> entry : list) {
+            result.put(entry.getKey(), entry.getValue());
+        }
+
+        int counter = 1;
+
+        for (Map.Entry<String , Integer> entry : list) {
+
+            if (counter == 1){
+                System.out.println( counter + "st place: " + entry.getKey());
+            }else if (counter == 2){
+                System.out.println( counter + "nd place: " + entry.getKey());
+            }else if (counter == 3){
+                System.out.println( counter + "rd place: " + entry.getKey());
+            }
+            counter++;
+        }
+    }
+}
