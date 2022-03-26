@@ -1,0 +1,85 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+
+public class TheImitationGame {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        String[] massage = sc.nextLine().split("");
+
+        List<String> list = new ArrayList<>();
+
+        for (int i = 0; i < massage.length; i++) {
+            list.add(massage[i]);
+        }
+
+        String commands = sc.nextLine();
+
+        while (!commands.equals("Decode")) {
+
+            String[] info = commands.split("\\|");
+
+            switch (info[0]) {
+                case "Move":
+                    int shift = Integer.parseInt(info[1]);
+
+                    while (shift != 0) {
+
+                        StringBuilder holdFirstItem = new StringBuilder();
+
+                        holdFirstItem.append(list.get(0));
+
+                        list.add(holdFirstItem.toString());
+                        list.remove(0);
+
+                        shift--;
+                    }
+                    break;
+                case "Insert":
+
+                    int insertIndex = Integer.parseInt(info[1]);
+                    String value = info[2];
+
+                    if (value.length() > 1) {
+                        char[] hold = value.toCharArray();
+
+                        if (insertIndex > list.size()){
+                            for (int i = 0; i < hold.length; i++) {
+                                list.add(String.valueOf(hold[i]));
+                            }
+                        }else {
+                            for (int i = hold.length - 1; i >= 0; i--) {
+                                list.add(insertIndex, String.valueOf(hold[i]));
+                            }
+                        }
+                    } else {
+                        list.add(insertIndex, value);
+                    }
+
+                    break;
+                case "ChangeAll":
+
+                    String substring = info[1];
+                    String replacement = info[2];
+
+                    for (int i = 0; i < list.size(); i++) {
+                        if (list.get(i).equals(substring)) {
+                            list.set(i, replacement);
+                        }
+                    }
+
+                    break;
+            }
+
+            commands = sc.nextLine();
+        }
+
+
+        System.out.print("The decrypted message is: ");
+        list.stream().forEach(e -> System.out.print(e));
+    }
+}
