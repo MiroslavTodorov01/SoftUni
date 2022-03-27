@@ -1,0 +1,80 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class AdAstra {
+
+    static class Calories{
+        String name;
+        String data;
+        int calories;
+
+        Calories( String name,String data,int calories){
+            this.name = name;
+            this.data = data;
+            this.calories = calories;
+        }
+
+        int getCalories(){
+            return this.calories;
+        }
+
+        String getName(){
+            return this.name;
+        }
+
+        String getData(){
+            return this.data;
+        }
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        String input = sc.nextLine();
+
+        int calories = 0;
+
+
+        List<Calories> holdCalories = new ArrayList<>();
+
+        Pattern pattern = Pattern.compile("\\#([A-za-z ]+)\\#(\\d{2}\\/\\d{2}\\/\\d{2})\\#(\\d{1,5})\\#|\\|([A-za-z ]+)\\|(\\d{2}\\/\\d{2}\\/\\d{2})\\|(\\d{1,5})\\|");
+        Matcher matcher = pattern.matcher(input);
+
+        while (matcher.find()){
+
+            if (matcher.group(1) != null){
+
+                if (Integer.parseInt(matcher.group(3)) > 10000){
+                    continue;
+                }
+
+                holdCalories.add(new Calories(matcher.group(1),matcher.group(2),Integer.parseInt(matcher.group(3))));
+            }else {
+
+                if (Integer.parseInt(matcher.group(6)) > 10000){
+                    continue;
+                }
+
+                holdCalories.add(new Calories(matcher.group(4),matcher.group(5),Integer.parseInt(matcher.group(6))));
+            }
+        }
+
+        for (int i = 0; i < holdCalories.size(); i++) {
+            calories += holdCalories.get(i).getCalories();
+        }
+
+        int daysSurvive = 0;
+
+        double carlori = Math.floor((double) calories / 2000);
+
+        System.out.println("You have food to last you for: " + (int)carlori + " days!");
+
+        for (int i = 0; i < holdCalories.size(); i++) {
+            System.out.println("Item: " + holdCalories.get(i).getName() +", Best before: " + holdCalories.get(i).getData() + ", Nutrition: " + holdCalories.get(i).getCalories());
+        }
+    }
+}
