@@ -1,0 +1,120 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class ThePianist {
+
+    static class Pianist {
+        String price;
+        String composer;
+        String key;
+
+        public Pianist(String price, String composer, String key) {
+            this.price = price;
+            this.composer = composer;
+            this.key = key;
+        }
+
+        String getPrice() {
+            return this.price;
+        }
+
+        String getComposer() {
+            return this.composer;
+        }
+
+        String getKey() {
+            return this.key;
+        }
+
+        void setKey(String key){
+            this.key = key;
+        }
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int n = Integer.parseInt(sc.nextLine());
+
+        List<Pianist> holdInfo = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            String[] line = sc.nextLine().split("\\|");
+
+            holdInfo.add(new Pianist(line[0], line[1], line[2]));
+        }
+
+        String command = sc.nextLine();
+
+        while (!command.equals("Stop")) {
+
+            String[] info = command.split("\\|");
+
+            switch (info[0]) {
+                case "Add":
+
+                    boolean ifExists = false;
+
+                    for (int i = 0; i < holdInfo.size(); i++) {
+                        if (holdInfo.get(i).getPrice().equals(info[1])) {
+                            ifExists = true;
+                            System.out.println(info[1] + " is already in the collection!");
+                            break;
+                        }
+                    }
+
+                    if (!ifExists) {
+                        holdInfo.add(new Pianist(info[1], info[2], info[3]));
+                        System.out.println(info[1] + " by " + info[2] + " in " + info[3] + " added to the collection!");
+                    }
+
+                    break;
+                case "Remove":
+
+                    boolean priceExists = false;
+
+                    for (int i = 0; i < holdInfo.size(); i++) {
+                        if (holdInfo.get(i).getPrice().equals(info[1])){
+                            priceExists = true;
+                            holdInfo.remove(i);
+                            System.out.println("Successfully removed " + info[1] + "!");
+                        }
+                    }
+
+                    if (!priceExists){
+                        System.out.println("Invalid operation! " + info[1] + " does not exist in the collection.");
+                    }
+
+                    break;
+                case "ChangeKey":
+
+                    boolean foundPiece = false;
+
+                    for (int i = 0; i < holdInfo.size(); i++) {
+
+                        if (holdInfo.get(i).getPrice().equals(info[1])){
+                            foundPiece = true;
+                            holdInfo.get(i).setKey(info[2]);
+                            System.out.println("Changed the key of " + info[1] + " to " + info[2] + "!");
+                        }
+                    }
+
+                    if (!foundPiece){
+                        System.out.println("Invalid operation! " + info[1] + " does not exist in the collection.");
+                    }
+
+                    break;
+            }
+
+            command = sc.nextLine();
+        }
+
+
+        for(Pianist a : holdInfo){
+            System.out.println(a.getPrice() + " -> Composer: " + a.getComposer() + ", Key: " + a.getKey());
+        }
+
+    }
+}
