@@ -1,0 +1,131 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
+public class WorldTour {
+
+    static void printing(List<String> input){
+
+        for(String a : input){
+            System.out.print(a);
+        }
+
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        String line = sc.nextLine();
+
+        List<String> currentLine = new ArrayList<>();
+
+        for (int i = 0; i < line.length(); i++) {
+            char character = line.charAt(i);
+            currentLine.add(String.valueOf(character));
+        }
+
+        line = sc.nextLine();
+
+        while (!line.equals("Travel")){
+
+            String[] info = line.split(":");
+
+            switch (info[0]){
+                case "Add Stop":
+
+                    int indexOfAdd = Integer.parseInt(info[1]);
+
+                    if (indexOfAdd < 0 | indexOfAdd >= currentLine.size()){
+
+                        printing(currentLine);
+                        break;
+
+                    }
+
+                    String[] addString = info[2].split("");
+
+                    for (int i = addString.length - 1; i >= 0 ; i--) {
+                        currentLine.add(indexOfAdd,addString[i]);
+                    }
+
+                    printing(currentLine);
+
+                    break;
+                case "Remove Stop":
+
+                    int startIndex = Integer.parseInt(info[1]);
+                    int endIndex = Integer.parseInt(info[2]);
+
+                    if (startIndex < 0 | startIndex >= currentLine.size() | endIndex < 0 | endIndex >= currentLine.size()){
+                        printing(currentLine);
+                        break;
+                    }
+
+                    int a = startIndex;
+                    while (startIndex <= endIndex){
+
+                        currentLine.remove(a);
+                        startIndex++;
+                    }
+
+                    printing(currentLine);
+                    break;
+                case "Switch":
+
+                    String oldString = info[1];
+                    String newString = info[2];
+
+
+                    String holdList = currentLine.stream().collect(Collectors.joining());
+
+                    if (!holdList.contains(oldString)){
+                        printing(currentLine);
+                        break;
+                    }
+
+                    boolean ifNotMatch = true;
+
+                    for (int i = 0; i < currentLine.size(); i++) {
+
+                        if (currentLine.get(i).equals(String.valueOf(oldString.charAt(0)))){
+                            for (int j = 0; j < oldString.length(); j++) {
+
+                                if (!currentLine.get(i + j).equals(String.valueOf(oldString.charAt(j)))){
+                                    ifNotMatch = false;
+                                    break;
+                                }
+                            }
+
+                            if (ifNotMatch){
+
+                                for (int j = 0; j < oldString.length(); j++) {
+                                    currentLine.remove(i);
+                                }
+
+                                for (int k = newString.length() - 1; k >= 0; k--) {
+                                    currentLine.add(i,String.valueOf(newString.charAt(k)));
+                                }
+
+                                i += newString.length();
+
+
+                            }
+                        }
+                    }
+
+                    printing(currentLine);
+
+                    break;
+            }
+
+            line = sc.nextLine();
+        }
+
+        System.out.print("Ready for world tour! Planned stops: ");
+        printing(currentLine);
+    }
+}
