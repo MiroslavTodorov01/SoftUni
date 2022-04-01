@@ -1,0 +1,188 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class PlantDiscovery {
+
+    static class Planets{
+
+        String name;
+        int rarity;
+        double rating;
+        int counter;
+
+        Planets(String name, int rarity, double rating, int counter){
+
+            this.name = name;
+            this.rarity = rarity;
+            this.rating = rating;
+            this.counter = counter;
+        }
+
+        String getName(){
+            return this.name;
+        }
+
+        int getRarity(){
+            return this.rarity;
+        }
+
+        double getRating(){
+            return this.rating;
+        }
+
+        int getCounter(){
+            return this.counter;
+        }
+
+        void setRating(double rating){
+            this.rating = rating;
+        }
+
+        void setRarity(int rarity){
+            this.rarity = rarity;
+        }
+
+        void setCounter(int counter){
+            this.counter = counter;
+        }
+
+        void setName(String name){
+            this.name = name;
+        }
+
+    }
+
+    static int index(List<Planets> input,String planet){
+
+        int index = -1;
+
+        for (int i = 0; i < input.size(); i++) {
+
+            if (input.get(i).getName().equals(planet)){
+                index = i;
+                break;
+            }
+        }
+
+        return index;
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int n = Integer.parseInt(sc.nextLine());
+
+
+
+        List<Planets> planets = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            String[] plane = sc.nextLine().split("<->");
+
+            boolean ifFound = false;
+
+            for (int j = 0; j < planets.size(); j++) {
+
+                if(planets.get(j).getName().equals(plane[0])){
+
+                    planets.get(j).setRarity(Integer.parseInt(plane[1]));
+                    ifFound = true;
+                }
+            }
+
+            if (!ifFound){
+                planets.add(new Planets(plane[0],Integer.parseInt(plane[1]),0,0));
+            }
+
+
+        }
+
+        String commands = sc.nextLine();
+
+        while (!commands.equals("Exhibition")){
+
+            Pattern pattern = Pattern.compile("([A-Z][a-z]+): ([A-Za-z]+) - (\\d+)|([A-Z][a-z]+): ([A-Za-z]+)");
+            Matcher matcher = pattern.matcher(commands);
+
+            if (!matcher.find()){
+                System.out.println("error");
+
+            }
+
+            pattern = Pattern.compile("([A-Z][a-z]+): ([A-Za-z]+) - (\\d+)|([A-Z][a-z]+): ([A-Za-z]+)");
+            matcher = pattern.matcher(commands);
+
+            while (matcher.find()){
+
+                if (matcher.group(1) != null){
+
+                    switch (matcher.group(1)){
+
+                        case "Rate":
+
+                            int index = index(planets,matcher.group(2));
+
+                            if (index != -1){
+                                planets.get(index).setRating(Double.parseDouble(matcher.group(3)) + planets.get(index).getRating());
+                                planets.get(index).setCounter(1 + planets.get(index).getCounter());
+                            }else {
+                                System.out.println("error");
+                            }
+
+                            break;
+                        case "Update":
+
+                            int indexUpdate = index(planets,matcher.group(2));
+
+                            if (indexUpdate != -1){
+
+                                planets.get(indexUpdate).setRarity(Integer.parseInt(matcher.group(3)));
+
+                            }else {
+                                System.out.println("error");
+                            }
+
+                            break;
+                    }
+
+                }else {
+
+                    int indexReset = index(planets,matcher.group(5));
+
+                    if (indexReset != -1){
+
+                        planets.get(indexReset).setRating(0);
+                        planets.get(indexReset).setCounter(0);
+
+                    }else {
+                        System.out.println("error");
+                    }
+
+                }
+
+
+
+            }
+
+
+            commands = sc.nextLine();
+        }
+
+        System.out.println("Plants for the exhibition:");
+
+        for (int i = 0; i < planets.size(); i++) {
+
+            if (planets.get(i).getCounter() != 0){
+                System.out.printf("- %s; Rarity: %d; Rating: %.2f%n",planets.get(i).getName(), planets.get(i).getRarity(), planets.get(i).getRating() / planets.get(i).getCounter());
+            }else {
+                System.out.printf("- %s; Rarity: %d; Rating: %.2f%n",planets.get(i).getName(), planets.get(i).getRarity(), planets.get(i).getRating());
+            }
+
+        }
+
+    }
+}
