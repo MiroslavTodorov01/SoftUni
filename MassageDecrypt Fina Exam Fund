@@ -1,0 +1,90 @@
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class MessageDecrypter {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int n = Integer.parseInt(sc.nextLine());
+
+        for (int i = 0; i < n; i++) {
+
+            String massage = sc.nextLine();
+
+            Pattern pattern = Pattern.compile("^%[A-Z][a-z]{2,}%: \\[\\d+\\]\\|\\[\\d+\\]\\|\\[\\d+\\]\\|$|^\\$[A-Z][a-z]{2,}\\$: \\[\\d+\\]\\|\\[\\d+\\]\\|\\[\\d+\\]\\|$");
+            Matcher matcher = pattern.matcher(massage);
+
+            if (matcher.find()) {
+
+                pattern = Pattern.compile("%([A-Z][a-z]{2,})%");
+                matcher = pattern.matcher(massage);
+
+                if (matcher.find()) {
+
+                    String tag = matcher.group(1);
+
+                    pattern = Pattern.compile("\\[(\\d+)\\]\\|\\[(\\d+)\\]\\|\\[(\\d+)\\]\\|");
+                    matcher = pattern.matcher(massage);
+
+
+                    int first = 0;
+                    int second = 0;
+                    int third = 0;
+
+                    while (matcher.find()) {
+
+
+                        first = Integer.parseInt(matcher.group(1));
+
+                        second = Integer.parseInt(matcher.group(2));
+
+                        third = Integer.parseInt(matcher.group(3));
+
+
+                    }
+
+
+                    System.out.println(tag + ": " + (char) first + (char) second + (char) third);
+
+                } else {
+
+                    pattern = Pattern.compile("\\$([A-Z][a-z]{2,})\\$");
+                    matcher = pattern.matcher(massage);
+
+                    matcher.find();
+
+                    String tag = matcher.group(1);
+
+                    pattern = Pattern.compile("\\[(\\d+)\\]\\|\\[(\\d+)\\]\\|\\[(\\d+)\\]\\|");
+                    matcher = pattern.matcher(massage);
+
+
+                    int first = 0;
+                    int second = 0;
+                    int third = 0;
+
+                    while (matcher.find()) {
+
+
+                        first = Integer.parseInt(matcher.group(1));
+
+                        second = Integer.parseInt(matcher.group(2));
+
+                        third = Integer.parseInt(matcher.group(3));
+
+
+                    }
+
+
+                    System.out.println(tag + ": " + (char) first + (char) second + (char) third);
+                }
+
+            } else {
+                System.out.println("Valid message not found!");
+            }
+        }
+    }
+}
