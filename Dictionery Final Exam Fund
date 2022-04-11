@@ -1,0 +1,65 @@
+import java.util.*;
+
+public class Dictionary {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        String[] line = sc.nextLine().split(" \\| ");
+
+        Map<String, List<String>> dictionery = new LinkedHashMap<>();
+
+        for (int i = 0; i < line.length; i++) {
+
+            String[] getWord = line[i].split(": ");
+
+
+
+                if (dictionery.containsKey(getWord[0])){
+                    dictionery.get(getWord[0]).add(getWord[1]);
+                }else {
+                    dictionery.put(getWord[0], new ArrayList<>());
+                    dictionery.get(getWord[0]).add(getWord[1]);
+                }
+
+
+
+
+        }
+
+        String[] wordsFormTeacher = sc.nextLine().split(" \\| ");
+
+        String command = sc.nextLine();
+
+        if (command.equals("Hand Over")){
+
+           for(Map.Entry<String,List<String>> entry : dictionery.entrySet()){
+               System.out.print(entry.getKey() + " ");
+           }
+
+        }else {
+
+
+            for(Map.Entry<String,List<String>> entry : dictionery.entrySet()){
+
+                for (int k = 0; k < wordsFormTeacher.length; k++) {
+
+                    if (entry.getKey().equals(wordsFormTeacher[k])){
+                        System.out.println(entry.getKey() + ":");
+
+                        List<String> currentList = entry.getValue();
+
+                        for (int j = 0; j < currentList.size(); j++) {
+                            System.out.println("-" + currentList.get(j));
+                        }
+
+                        break;
+                    }
+                }
+
+            }
+
+        }
+    }
+}
