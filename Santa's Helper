@@ -1,0 +1,68 @@
+import java.util.ArrayList;
+import java.util.List;
+
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class SantasHelper {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int key = Integer.parseInt(sc.nextLine());
+
+        List<String> goodChildrens = new ArrayList<>();
+
+        String line = sc.nextLine();
+
+        while (!line.equals("end")){
+
+            char[] info = line.toCharArray();
+
+            StringBuilder encryptMassage = new StringBuilder();
+
+            for (int i = 0; i < info.length; i++) {
+
+                char encryptLetter = (char)(info[i] - key);
+                encryptMassage.append(encryptLetter);
+            }
+
+            Pattern pattern = Pattern.compile("!([A-Z])!");
+            Matcher matcher = pattern.matcher(encryptMassage);
+
+            boolean ifIsGood = true;
+
+            if (matcher.find()){
+
+                if (matcher.group(1).equals("G")){
+
+                    pattern = Pattern.compile("@([A-Z][a-z]+)");
+                    matcher = pattern.matcher(encryptMassage);
+
+                    while (matcher.find()){
+                        goodChildrens.add(matcher.group(1));
+                    }
+
+                }else {
+                    ifIsGood = false;
+                }
+
+            }else {
+                ifIsGood = false;
+            }
+
+            if (!ifIsGood){
+                line = sc.nextLine();
+                continue;
+
+
+            }
+
+            line = sc.nextLine();
+        }
+
+        goodChildrens.forEach(System.out::println);
+    }
+}
