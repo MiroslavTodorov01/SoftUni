@@ -1,0 +1,59 @@
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class EncryptSortandPrintArray {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int numberOfNames = Integer.parseInt(sc.nextLine());
+
+        int[] sums = new int[numberOfNames];
+        char[] name = new char[numberOfNames];
+
+        int currentSum = 0;
+        int counterOFSums = 0;
+
+        while (numberOfNames != 0) {
+
+            String currentName = sc.nextLine();
+
+            name = currentName.toCharArray();
+
+            for (int i = 0; i < name.length; i++) {
+                int currentCharNum = name[i];
+                if (name[i] == 'a' || name[i] == 'e' || name[i] == 'i' || name[i] == 'o' || name[i] == 'u' || name[i] == 'A' || name[i] == 'E' || name[i] == 'I' || name[i] == 'O' || name[i] == 'U') {
+
+
+                    currentSum += currentCharNum * currentName.length();
+                } else {
+                    currentSum += currentCharNum / currentName.length();
+                }
+            }
+
+            sums[counterOFSums] = currentSum;
+
+
+            currentSum = 0;
+            counterOFSums++;
+            numberOfNames--;
+        }
+
+        for (int i = 0; i < sums.length - 1; i++) {
+            for (int j = 0; j < sums.length - 1; j++) {
+                int currentSumArray = sums[j];
+                if (sums[j] > sums[j + 1]){
+                    sums[j] = sums[j + 1];
+                    sums[j + 1] = currentSumArray;
+
+                }
+            }
+
+        }
+
+        for (int a: sums){
+            System.out.println(a);
+        }
+    }
+}
