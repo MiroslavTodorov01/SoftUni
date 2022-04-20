@@ -1,0 +1,43 @@
+import java.util.Scanner;
+
+public class ValidUsernames {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        String[] line = sc.nextLine().split(", ");
+
+        for (int i = 0; i < line.length; i++) {
+            if (line[i].length() < 3 || line[i].length() > 16){
+                continue;
+            }
+
+            boolean isCorrect = true;
+
+            char[] word = line[i].toCharArray();
+
+            for (int j = 0; j < word.length; j++) {
+
+                if (word[j] >= 65  && word[j] <= 90){
+
+                }else if (word[j] >= 97 && word[j] <= 122){
+
+                }else if (word[j] >= 48 && word[j] <= 57){
+
+                }else if (word[j] == 45){
+
+                }else if (word[j] == 95){
+
+                }else {
+                    isCorrect = false;
+                    break;
+                }
+            }
+
+            if (isCorrect){
+                System.out.println(line[i]);
+            }
+        }
+    }
+}
