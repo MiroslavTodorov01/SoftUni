@@ -1,0 +1,66 @@
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class hello {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        String line = sc.nextLine();
+
+        String[] splitLine = line.split("\\d+");
+
+
+        for (int i = 0; i < splitLine.length; i++) {
+            splitLine[i] = splitLine[i].toLowerCase(Locale.ROOT);
+        }
+
+        List<Character> usedSymbols = new ArrayList<>();
+        usedSymbols.add(splitLine[0].charAt(0));
+
+        int symbolsCount = 1;
+
+        StringBuilder printLine = new StringBuilder();
+
+        Pattern pattern = Pattern.compile("(\\d+)");
+        Matcher matcher = pattern.matcher(line);
+
+        int counter = 0;
+        while (matcher.find()) {
+
+
+            for (int i = 0; i < splitLine[counter].length(); i++) {
+
+                char currentSymbol = splitLine[counter].charAt(i);
+
+                boolean ifItsUsed = false;
+
+                for (int j = 0; j < usedSymbols.size(); j++) {
+
+                    if (usedSymbols.get(j) == currentSymbol) {
+
+                        ifItsUsed = true;
+                        break;
+                    }
+                }
+
+                if (!ifItsUsed) {
+
+                    symbolsCount++;
+                    usedSymbols.add(currentSymbol);
+                }
+            }
+
+            int num = Integer.parseInt(matcher.group(1));
+
+            for (int i = 0; i < num; i++) {
+                printLine.append(splitLine[counter].toUpperCase(Locale.ROOT));
+            }
+
+            counter++;
+        }
+
+        System.out.println("Unique symbols used: " + symbolsCount);
+        System.out.println(printLine);
+    }
+}
