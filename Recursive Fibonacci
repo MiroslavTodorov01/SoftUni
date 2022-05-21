@@ -1,0 +1,34 @@
+import java.util.ArrayDeque;
+import java.util.Scanner;
+
+public class RecursiveFibonacci {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int number = Integer.parseInt(sc.nextLine());
+
+        ArrayDeque<Long> fibonacciNumbers = new ArrayDeque<>();
+
+        fibonacciNumbers.push(1L);
+        fibonacciNumbers.push(1L);
+
+        for (int i = 1; i < number; i++) {
+
+            long firstNum = fibonacciNumbers.pop();
+            long secondNum = fibonacciNumbers.pop();
+            long sum = firstNum + secondNum;
+
+            fibonacciNumbers.push(firstNum);
+            fibonacciNumbers.push(sum);
+        }
+
+        if (number == 0){
+            System.out.println(0);
+        } else {
+            System.out.println(fibonacciNumbers.peek());
+        }
+
+    }
+}
