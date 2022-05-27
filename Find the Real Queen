@@ -1,0 +1,193 @@
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class FindtheRealQueen {
+
+    static boolean rowCheck(char[] row) {
+
+        int counter = 0;
+
+        for (int k = 0; k < row.length; k++) {
+            if (row[k] == 'q') {
+                counter++;
+            }
+        }
+
+        return counter == 1;
+    }
+
+    static boolean columnCheck(char[] column) {
+
+        int counter = 0;
+
+        for (int k = 0; k < column.length; k++) {
+            if (column[k] == 'q') {
+                counter++;
+            }
+        }
+
+        return counter == 1;
+    }
+
+    static boolean firstLeftDiagonals(char[][] matrix, int i, int j) {
+
+        int rowIndex = i;
+        int columnIndex = j;
+        int counterQ = 0;
+
+        for (int k = 0; k < matrix.length; k++) {
+
+            if (matrix[rowIndex][columnIndex] == 'q') {
+                counterQ++;
+            }
+
+            if (rowIndex == 0 || columnIndex == 0) {
+                break;
+            }
+            rowIndex--;
+            columnIndex--;
+        }
+
+        if (counterQ > 1) {
+            return false;
+        } else if (!firstRightDiagonal(matrix, i, j)) {
+            return false;
+        } else if (!secondRightDiagonal(matrix, i, j)) {
+            return false;
+        } else if (!secondLeftDiagonal(matrix, i, j)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    static boolean firstRightDiagonal(char[][] matrix, int i, int j) {
+
+        int rowIndex = i;
+        int columnIndex = j;
+        int counterQ = 0;
+
+        for (int k = 0; k < matrix.length; k++) {
+
+            if (matrix[rowIndex][columnIndex] == 'q') {
+                counterQ++;
+            }
+
+            if (rowIndex == matrix.length - 1 || columnIndex == matrix.length - 1) {
+                break;
+            }
+            rowIndex++;
+            columnIndex++;
+        }
+
+        if (counterQ > 1) {
+            return false;
+        }
+        return true;
+    }
+
+    static boolean secondRightDiagonal(char[][] matrix, int i, int j) {
+
+        int rowIndex = i;
+        int columnIndex = j;
+        int counterQ = 0;
+
+        for (int k = 0; k < matrix.length; k++) {
+
+            if (matrix[rowIndex][columnIndex] == 'q') {
+                counterQ++;
+            }
+
+            if (rowIndex == 0 || columnIndex == matrix.length - 1) {
+                break;
+            }
+            rowIndex--;
+            columnIndex++;
+        }
+
+        if (counterQ > 1) {
+            return false;
+        }
+        return true;
+
+    }
+
+    static boolean secondLeftDiagonal(char[][] matrix, int i, int j) {
+
+        int rowIndex = i;
+        int columnIndex = j;
+        int counterQ = 0;
+
+        for (int k = 0; k < matrix.length; k++) {
+
+            if (matrix[rowIndex][columnIndex] == 'q') {
+                counterQ++;
+            }
+
+            if (rowIndex == matrix.length - 1 || columnIndex == 0) {
+                break;
+            }
+            rowIndex++;
+            columnIndex--;
+        }
+
+        if (counterQ > 1) {
+            return false;
+        }
+        return true;
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        char[][] matrix = new char[8][8];
+
+        for (int i = 0; i < 8; i++) {
+            String[] row = sc.nextLine().split("\\s+");
+            for (int j = 0; j < 8; j++) {
+                matrix[i][j] = row[j].charAt(0);
+
+            }
+        }
+
+
+        boolean found = false;
+
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+
+                if (matrix[i][j] == 'q') {
+
+                    char[] currentRow = matrix[i];
+
+                    if (rowCheck(currentRow)) {
+
+                        char[] currentColumn = new char[matrix.length];
+
+                        for (int k = 0; k < matrix.length; k++) {
+                            currentColumn[k] = matrix[k][j];
+                        }
+
+
+
+                        if (columnCheck(currentColumn)) {
+
+                            if (firstLeftDiagonals(matrix,i,j)){
+                                System.out.println(i + " " + j);
+                                found = true;
+                                break;
+                            }
+
+                        }
+
+                    }
+
+                }
+            }
+            if (found){
+                break;
+            }
+        }
+    }
+}
