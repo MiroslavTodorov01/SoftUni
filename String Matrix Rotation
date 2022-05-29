@@ -1,0 +1,155 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class StringMatrixRotation {
+
+    static void matrixChane(char[][] currentMatrix, char[][] rotatedMatrix){
+
+        for (int i = 0; i < rotatedMatrix.length; i++) {
+            char[] row = rotatedMatrix[i];
+            currentMatrix[i] = row;
+        }
+
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        String rotation = sc.nextLine();
+
+        Pattern pattern = Pattern.compile("\\((\\d+)\\)");
+        Matcher matcher = pattern.matcher(rotation);
+        matcher.find();
+        int degree = Integer.parseInt(matcher.group(1));
+
+        String word = sc.nextLine();
+
+        List<String> words = new ArrayList<>();
+
+        int longestWord = 0;
+
+        while (!word.equals("END")) {
+
+            if (word.length() > longestWord) {
+                longestWord = word.length();
+            }
+
+            words.add(word);
+
+            word = sc.nextLine();
+        }
+
+        char[][] matrix = new char[words.size()][];
+
+        for (int i = 0; i < matrix.length; i++) {
+            char[] symbols = words.get(i).toCharArray();
+            matrix[i] = symbols;
+        }
+
+        while (degree != 0) {
+
+            char[][] rotatedMatrix = new char[longestWord][matrix.length];
+
+            for (int i = matrix.length - 1; i >= 0; i--) {
+                char[] row = matrix[i];
+                for (int j = 0; j < rotatedMatrix.length; j++) {
+
+                    if (j == row.length) {
+                        break;
+                    }
+                    rotatedMatrix[j][matrix.length - 1 - i] = row[j];
+                }
+            }
+
+            matrix = new char[longestWord][rotatedMatrix[0].length];
+
+            matrixChane(matrix,rotatedMatrix);
+
+            degree -= 90;
+
+            if (degree == 0){
+
+                break;
+            }
+
+            rotatedMatrix = new char[matrix[0].length][matrix.length];
+
+            for (int i = 0; i < matrix[0].length; i++) {
+
+                char[] row = new char[longestWord];
+                for (int j = 0; j < matrix.length; j++) {
+                    row[longestWord - 1 - j] = matrix[j][i];
+                }
+                rotatedMatrix[i] = row;
+            }
+
+            matrix = new char[rotatedMatrix.length][rotatedMatrix[0].length];
+
+            matrixChane(matrix,rotatedMatrix);
+
+            degree -= 90;
+
+            if (degree == 0){
+
+                break;
+            }
+
+            rotatedMatrix = new char[matrix[0].length][matrix.length];
+
+            for (int i = matrix.length - 1; i >=0 ; i--) {
+                char[] row = matrix[i];
+                for (int j = 0; j < matrix[0].length; j++) {
+                    rotatedMatrix[j][matrix.length - 1 - i] = row[j];
+                }
+            }
+
+            matrix = new char[rotatedMatrix.length][rotatedMatrix[0].length];
+
+            matrixChane(matrix,rotatedMatrix);
+
+            degree -= 90;
+
+            if (degree == 0){
+
+                break;
+            }
+
+            rotatedMatrix = new char[rotatedMatrix[0].length][rotatedMatrix.length];
+
+            for (int i = 0; i < matrix[0].length; i++) {
+                char[] row = new char[matrix.length];
+                for (int j = matrix.length - 1; j >= 0 ; j--) {
+                    row[matrix.length - 1 - j] = matrix[j][i];
+                }
+                rotatedMatrix[i] = row;
+            }
+
+            matrix = new char[rotatedMatrix.length][rotatedMatrix[0].length];
+
+            matrixChane(matrix,rotatedMatrix);
+
+            degree -= 90;
+
+        }
+
+
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+
+                if (matrix[i][j] == '\0'){
+                    System.out.print(" ");
+                }else {
+                    System.out.print((matrix[i][j]));
+                }
+
+            }
+            System.out.println();
+        }
+
+    }
+}
