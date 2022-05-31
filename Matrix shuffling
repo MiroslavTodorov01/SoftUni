@@ -1,0 +1,59 @@
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class MatrixShuffling {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int[] matrixSize = Arrays.stream(sc.nextLine().split("\\s+")).mapToInt(Integer::parseInt).toArray();
+
+        String[][] matrix = new String[matrixSize[0]][matrixSize[1]];
+
+        for (int i = 0; i < matrix.length; i++) {
+            String[] row = sc.nextLine().split("\\s+");
+            matrix[i] = row;
+        }
+
+        String command = sc.nextLine();
+
+        while (!command.equals("END")){
+
+            if (command.contains("swap")){
+
+                String[] info = command.split("\\s+");
+
+                if (info.length == 5){
+
+                    int firstRow = Integer.parseInt(info[1]);
+                    int firstColumn = Integer.parseInt(info[2]);
+                    int secondRow = Integer.parseInt(info[3]);
+                    int secondColumn = Integer.parseInt(info[4]);
+
+                    if (firstRow > matrix[0].length || firstColumn > matrix.length || secondRow > matrix[0].length || secondColumn > matrix.length){
+                        System.out.println("Invalid input!");
+                    }else {
+
+                        String holdElement = matrix[firstRow][firstColumn];
+                        matrix[firstRow][firstColumn] = matrix[secondRow][secondColumn];
+                        matrix[secondRow][secondColumn] = holdElement;
+
+                        for (int i = 0; i < matrix.length; i++) {
+                            String[] row = matrix[i];
+                            Arrays.stream(row).forEach(e -> System.out.print(e + " "));
+                            System.out.println();
+                        }
+                    }
+
+                }else {
+                    System.out.println("Invalid input!");
+                }
+            }else {
+                System.out.println("Invalid input!");
+            }
+
+            command = sc.nextLine();
+        }
+    }
+}
