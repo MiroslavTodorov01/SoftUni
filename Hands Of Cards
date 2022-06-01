@@ -1,0 +1,182 @@
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class HandsOfCards {
+
+
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        String input = sc.nextLine();
+
+        Map<String, List<String>> info = new LinkedHashMap<>();
+
+        while (!input.equals("JOKER")) {
+
+            Pattern pattern = Pattern.compile("(\\s+\\d+[A-Z])|(\\s+[A-z]+)");
+            Matcher matcher = pattern.matcher(input);
+
+            String[] getName = input.split(":");
+
+            Set<String> checkIfNotAdd = new HashSet<>();
+
+            while (matcher.find()) {
+
+                if (matcher.group(1) == null) {
+
+                    if (!checkIfNotAdd.contains(matcher.group(2))) {
+
+                        if (info.containsKey(getName[0])) {
+
+                            info.get(getName[0]).add(matcher.group(2));
+                        } else {
+                            info.put(getName[0], new ArrayList<>());
+                            info.get(getName[0]).add(matcher.group(2));
+
+                        }
+
+                        checkIfNotAdd.add(matcher.group(2));
+                    }
+                } else {
+
+                    if (!checkIfNotAdd.contains(matcher.group(1))) {
+
+                        if (info.containsKey(getName[0])) {
+                            info.get(getName[0]).add(matcher.group(1));
+                        } else {
+                            info.put(getName[0], new ArrayList<>());
+                            info.get(getName[0]).add(matcher.group(1));
+
+                        }
+
+                        checkIfNotAdd.add(matcher.group(1));
+                    }
+
+                }
+            }
+
+            input = sc.nextLine();
+        }
+
+
+        Map<String,Integer> scoreboard = new LinkedHashMap<>();
+
+        for (Map.Entry<String, List<String>> entry : info.entrySet()) {
+
+            List<String> value = entry.getValue();
+
+            Set<String> check = new HashSet<>(value);
+
+            String[] valueArr = new String[check.size()];
+
+            int counter = 0;
+            for (String s : check) {
+                valueArr[counter++] = s;
+            }
+
+            int sum = 0;
+
+            for (int i = 0; i < valueArr.length; i++) {
+
+                char power;
+                char type;
+                String twoDigit = "";
+
+                if (valueArr[i].length() > 3){
+                     power = valueArr[i].charAt(1);
+                     type = valueArr[i].charAt(3);
+                     twoDigit = String.valueOf(valueArr[i].charAt(1)) + String.valueOf(valueArr[i].charAt(2));
+                }else {
+                     power = valueArr[i].charAt(1);
+                     type = valueArr[i].charAt(2);
+                }
+
+
+                if (Character.isDigit(power)) {
+
+                    int number;
+
+                    if (!twoDigit.isEmpty()){
+                        number = Integer.parseInt(twoDigit);
+                    }else {
+                        number = Integer.parseInt(String.valueOf(power));
+                    }
+
+                    int typeNumber = 0;
+                    switch (type) {
+                        case 'S':
+                            typeNumber = 4;
+                            break;
+                        case 'H':
+                            typeNumber = 3;
+                            break;
+                        case 'D':
+                            typeNumber = 2;
+                            break;
+                        case 'C':
+                            typeNumber = 1;
+                            break;
+                    }
+
+                    sum = number * typeNumber;
+
+                    if (!scoreboard.containsKey(entry.getKey())){
+                        scoreboard.put(entry.getKey(), sum);
+                    }else {
+                        scoreboard.put(entry.getKey(), scoreboard.get(entry.getKey()) + sum);
+                    }
+
+                }else {
+                    int number = 0;
+                    int typeNumber = 0;
+
+                    switch (power){
+                        case 'J':
+                            number = 11;
+                            break;
+                        case 'Q':
+                            number = 12;
+                            break;
+                        case 'K':
+                            number = 13;
+                            break;
+                        case 'A':
+                            number = 14;
+                            break;
+                    }
+
+                    switch (type){
+                        case 'S':
+                            typeNumber = 4;
+                            break;
+                        case 'H':
+                            typeNumber = 3;
+                            break;
+                        case 'D':
+                            typeNumber = 2;
+                            break;
+                        case 'C':
+                            typeNumber = 1;
+                            break;
+                    }
+
+                    sum = number * typeNumber;
+
+                    if (!scoreboard.containsKey(entry.getKey())){
+                        scoreboard.put(entry.getKey(), sum);
+                    }else {
+                        scoreboard.put(entry.getKey(), scoreboard.get(entry.getKey()) + sum);
+                    }
+                }
+            }
+        }
+
+
+        for (Map.Entry<String, Integer> entry : scoreboard.entrySet()) {
+            System.out.printf("%s: %d%n",entry.getKey(),entry.getValue());
+        }
+    }
+}
