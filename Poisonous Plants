@@ -1,0 +1,49 @@
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class PoisonousPlants {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int numberOfPlants = Integer.parseInt(sc.nextLine());
+
+        List<Integer> plants = Arrays.stream(sc.nextLine().split("\\s+")).map(Integer::parseInt).collect(Collectors.toList());
+
+
+        boolean ifNoPlantsDice = false;
+        int days = 0;
+
+        for (int i = 0; i < numberOfPlants; i++) {
+
+            int counterIfNoPlantsDice = 0;
+
+            for (int j = plants.size() - 1; j >= 0; j--) {
+
+                if (j == 0) {
+
+                    if (counterIfNoPlantsDice == 0) {
+                        ifNoPlantsDice = true;
+                    }
+                    continue;
+                }
+
+                if (plants.get(j) > plants.get(j - 1)) {
+                    plants.remove(j);
+                    counterIfNoPlantsDice = 1;
+                }
+
+            }
+
+            if (ifNoPlantsDice) {
+                break;
+            }
+
+            days++;
+        }
+
+
+        System.out.println(days);
+    }
+}
